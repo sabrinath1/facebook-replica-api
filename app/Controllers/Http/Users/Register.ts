@@ -3,6 +3,7 @@ import { StoreValidator } from 'App/Validators/User/Register'
 import { User, UserKey } from 'App/Models'
 import { faker } from '@faker-js/faker'
 import Mail from '@ioc:Adonis/Addons/Mail'
+import { UpdateValidator } from 'App/Validators/User/Register'
 
 export default class UserRegistersController {
   public async store({ request }: HttpContextContract) {
@@ -33,5 +34,14 @@ export default class UserRegistersController {
     return user
   }
 
-  public async update({}: HttpContextContract) {}
+  public async update({ request }: HttpContextContract) {
+    const { key, name, password } = await request.validate(UpdateValidator)
+    const userKey = await UserKey.findByOrFail('key', key)
+    const user = await userKey.related('user').query().firstOrFail()
+    const username = name.split('')[0].toLocaleLowerCase() + new Date().getTime()
+
+    user.merge({ name, password, username })
+    await user.save()
+    await userKey.delete()
+  }
 }
