@@ -6,3 +6,5 @@ Route.put('/users/register', 'Users/Register.update')
 
 Route.get('/users', 'Users/Main.show').middleware('auth')
 Route.put('users', 'Users/Main.update').middleware('auth')
+
+Route.put('/user/avatar', 'User/Main.update').middleware('auth')
