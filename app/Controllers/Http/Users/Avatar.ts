@@ -6,7 +6,7 @@ import fs from 'fs'
 
 export default class UserRegistersController {
   public async update({ request, auth }: HttpContextContract) {
-    await Database.transaction(async (trx) => {
+    const avatar = await Database.transaction(async (trx) => {
       const { file } = await request.validate(UpdateValidator)
 
       const user = auth.user!.useTransaction(trx)
@@ -25,6 +25,7 @@ export default class UserRegistersController {
 
       return avatar
     })
+    return avatar
   }
   public async destroy({ auth }: HttpContextContract) {
     await Database.transaction(async (trx) => {
