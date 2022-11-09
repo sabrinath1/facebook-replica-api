@@ -14,6 +14,8 @@ export default class Post extends BaseModel {
 
   @column()
   public description: string
+  @column()
+  public userId: string
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
